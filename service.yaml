@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: '${SERVICE@microservice-cache-config}'
+  namespace: '${NAMESPACE@microservice-config}'
+  labels:
+    moduleid: microservice-cache-data
+    version: 1.70.1-master
+spec:
+  clusterIP: None
+  ports:
+    -
+      port: '${INTERNAL_PORT@microservice-cache-config}'
+      targetPort: '${INTERNAL_PORT@microservice-cache-config}'
+  selector:
+    app: '${STATEFUL@microservice-cache-config}'

@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "microservice-config": {
+      "url": "github.com:vicjicaman/microservice-config.git",
+      "version": "1.70.1-master"
+    },
+    "microservice-auth-config": {
+      "url": "github.com:vicjicaman/microservice-cache-config.git",
+      "version": "1.70.2-master"
+    }
+  }
+}

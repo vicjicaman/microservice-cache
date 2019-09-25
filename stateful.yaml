@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: '${STATEFUL@microservice-cache-config}'
+  namespace: '${NAMESPACE@microservice-config}'
+  labels:
+    moduleid: microservice-cache-data
+    version: 1.70.0-master
+spec:
+  serviceName: '${SERVICE@microservice-cache-config}'
+  selector:
+    matchLabels:
+      app: '${STATEFUL@microservice-cache-config}'
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        moduleid: microservice-cache-data
+        version: 1.70.0-master
+        app: '${STATEFUL@microservice-cache-config}'
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        -
+          name: data
+          image: 'redis:3.2-alpine'
+          args:
+            - '--requirepass'
+            - SECRET_PASSWORD
+            - '--appendonly'
+            - yes
+            - '--save'
+            - '900'
+            - '1'
+            - '--save'
+            - '30'
+            - '1'
+          ports:
+            -
+              containerPort: '${INTERNAL_PORT@microservice-cache-config}'
+          volumeMounts:
+            -
+              name: microservice-cache-storage
+              mountPath: /data
+  volumeClaimTemplates:
+    -
+      metadata:
+        name: microservice-cache-storage
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: local-storage
+        resources:
+          requests:
+            storage: 1Gi
